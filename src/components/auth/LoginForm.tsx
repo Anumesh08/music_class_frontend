@@ -38,7 +38,7 @@ export default function LoginForm({
             <button
               type="button"
               onClick={clearForm}
-              className="text-xs text-gray-600 hover:text-gray-800"
+              className="text-xs text-gray-600 hover:text-gray-800 cursor-pointer"
             >
               Clear
             </button>
@@ -51,7 +51,7 @@ export default function LoginForm({
           onChange={(e) =>
             setMobileNo(e.target.value.replace(/\D/g, "").slice(0, 10))
           }
-          className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+          className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
           placeholder="Enter 10-digit mobile number"
           pattern="[0-9]{10}"
           maxLength={10}
@@ -74,31 +74,19 @@ export default function LoginForm({
           autoComplete="off"
           value={login_pin}
           onChange={(e) =>
-            setLoginPin(e.target.value.replace(/\D/g, "").slice(0, 4))
+            setLoginPin(e.target.value.replace(/\D/g, "").slice(0, 6))
           }
-          className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-          placeholder="Enter 4-digit PIN"
-          pattern="[0-9]{4}"
-          maxLength={4}
+          className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+          placeholder="Enter 6-digit PIN"
+          pattern="[0-9]{6}"
+          maxLength={6}
           required
           disabled={loading}
         />
         <div className="flex justify-between mt-1">
-          <p className="text-xs text-gray-500">4 digits only</p>
-          <p className="text-xs text-gray-500">Length: {login_pin.length}/4</p>
+          <p className="text-xs text-gray-500">6 digits only</p>
+          <p className="text-xs text-gray-500">Length: {login_pin.length}/6</p>
         </div>
-      </div>
-
-      {/* PIN Visual Indicator (Optional) */}
-      <div className="flex justify-center space-x-1">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div
-            key={index}
-            className={`w-3 h-3 rounded-full ${
-              index < login_pin.length ? "bg-blue-500" : "bg-gray-200"
-            }`}
-          />
-        ))}
       </div>
 
       {/* Error Message */}
@@ -115,7 +103,15 @@ export default function LoginForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="w-full text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        style={{
+          background: "linear-gradient(135deg, #E6C200 0%, #D4B000 100%)",
+          boxShadow:
+            "inset 0 1px 3px rgba(255,255,255,0.3), 0 1px 2px rgba(0,0,0,0.1)",
+          color: "black",
+          fontWeight: "2px",
+          cursor: loading ? "not-allowed" : "pointer",
+        }}
       >
         {loading ? (
           <div className="flex items-center justify-center">

@@ -11,8 +11,8 @@ const albertSans = Albert_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Liquor Inventory System",
-  description: "Manage your liquor shop inventory",
+  title: "Melody Hub System",
+  description: "Manage your music classes with ease",
 };
 
 export default function RootLayout({
