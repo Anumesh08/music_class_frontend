@@ -23,12 +23,17 @@ export const Sidebar = ({
         collapsed ? "w-[70px]" : "w-[220px]"
       }`}
     >
-      <div className="flex justify-center items-center  p-4 ">
-        {/* {!collapsed && (
+      <div className="flex justify-between items-center  p-4 ">
+        {!collapsed && (
           <div className="">
-            <span className="font-bold text-3xl">LIS</span>
+            <span className="font-bold text-2xl">
+              <i className="ri-music-2-line"></i>
+            </span>
           </div>
-        )} */}
+        )}
+        {!collapsed && (
+          <span className="font-semibold text-lg text-black">ADMIN</span>
+        )}
 
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -78,7 +83,8 @@ export const Sidebar = ({
             className={`flex flex-col items-center gap-1 p-4 rounded-xl transition-all duration-200
               
               ${
-                pathname === "/admissions"
+                pathname === "/admissions" ||
+                pathname?.startsWith("/admissions/")
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-blue-50 text-gray-700"
               }
@@ -87,13 +93,19 @@ export const Sidebar = ({
           >
             <i
               className={`ri-shopping-bag-3-line text-2xl  ${
-                pathname === "/admissions" ? "text-gray-900" : "text-black"
+                pathname === "/admissions" ||
+                pathname?.startsWith("/admissions/")
+                  ? "text-gray-900"
+                  : "text-black"
               }`}
             ></i>
             {!collapsed && (
               <span
                 className={`font-medium text-sm  ${
-                  pathname === "/admissions" ? "text-gray-900" : "text-black"
+                  pathname === "/admissions" ||
+                  pathname?.startsWith("/admissions/")
+                    ? "text-gray-900"
+                    : "text-black"
                 } `}
               >
                 Admissions Management

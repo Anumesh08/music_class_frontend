@@ -547,6 +547,7 @@ const AdmissionPage = () => {
               variant="outlined"
               onClick={() => reset()}
               disabled={isPending}
+              color="inherit"
             >
               Reset
             </Button>
