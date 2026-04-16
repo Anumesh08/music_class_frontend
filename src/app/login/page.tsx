@@ -206,7 +206,7 @@ export default function LoginPage() {
                     </span>
                   </div>
                   <h1 className="text-xl font-bold text-gray-900">
-                    Melody Hub
+                    Swar Sadhana
                   </h1>
                   <p className="text-xs text-gray-600 mt-2">
                     Sign in with Mobile & PIN
@@ -223,7 +223,8 @@ export default function LoginPage() {
                 {/* Footer */}
                 <div className="mt-5 text-center">
                   <p className="text-sm text-gray-500">
-                    © 2026 Melody Hub System
+                    © 2026 Swar Sadhana - Music Class Management. All rights
+                    reserved.
                   </p>
                 </div>
               </div>

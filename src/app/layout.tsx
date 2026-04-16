@@ -11,7 +11,7 @@ const albertSans = Albert_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Melody Hub System",
+  title: "Swar Sadhana",
   description: "Manage your music classes with ease",
 };
 
