@@ -34,7 +34,7 @@ const schema = z.object({
   whatsapp_number: z.string().min(10, "Valid WhatsApp number required"),
   address: z.string().min(1, "Address is required"),
   admission_type: z.enum(["new", "rejoined"], {
-    required_error: "Please select admission type",
+    message: "Please select admission type",
   }),
   rejoin_id: z.string().optional(),
 

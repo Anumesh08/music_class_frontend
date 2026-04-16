@@ -11,6 +11,7 @@ import {
   Button,
   TextField,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 
 import { Search } from "@mui/icons-material";
@@ -20,43 +21,75 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useRef, useState } from "react";
 
 import DeleteConfirmDialog from "./DeleteConfirmDialog";
-import {
-  deleteProduct,
-  getProductsAPI,
-  ProductListResponse,
-  ProductResponse,
-} from "@/app/api/Products/Products";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import AdmissionTableSkeleton from "@/components/skeleton/AdmissionTableSkeleton";
 
-export const useDeleteProduct = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (productId: number) => deleteProduct(productId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-    },
-    onError: (error) => {
-      console.error("Failed to delete product:", error);
-    },
-  });
-};
+// Static product data
+const staticProducts = [
+  {
+    product_id: 1,
+    student_name: "John Doe",
+    whatsapp_number: "9876543210",
+    instrument: "Guitar",
+    days_per_week: "3 days",
+    batch_timing: "10:00 AM - 11:00 AM",
+    payment_mode: "Monthly",
+    payment_installment: "₹2000/month",
+  },
+  {
+    product_id: 2,
+    student_name: "Jane Smith",
+    whatsapp_number: "9876543211",
+    instrument: "Piano",
+    days_per_week: "2 days",
+    batch_timing: "11:00 AM - 12:00 PM",
+    payment_mode: "Quarterly",
+    payment_installment: "₹5000/quarter",
+  },
+  {
+    product_id: 3,
+    student_name: "Mike Johnson",
+    whatsapp_number: "9876543212",
+    instrument: "Drums",
+    days_per_week: "4 days",
+    batch_timing: "02:00 PM - 03:00 PM",
+    payment_mode: "Half-Yearly",
+    payment_installment: "₹10000/half-year",
+  },
+  {
+    product_id: 4,
+    student_name: "Sarah Williams",
+    whatsapp_number: "9876543213",
+    instrument: "Violin",
+    days_per_week: "3 days",
+    batch_timing: "03:00 PM - 04:00 PM",
+    payment_mode: "Monthly",
+    payment_installment: "₹2500/month",
+  },
+  {
+    product_id: 5,
+    student_name: "Robert Brown",
+    whatsapp_number: "9876543214",
+    instrument: "Flute",
+    days_per_week: "2 days",
+    batch_timing: "04:00 PM - 05:00 PM",
+    payment_mode: "Yearly",
+    payment_installment: "₹15000/year",
+  },
+];
 
 const AdmissionTab = () => {
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null,
   );
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [editProduct, setEditProduct] = useState<ProductListResponse | null>(
-    null,
-  );
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [products, setProducts] = useState(staticProducts);
 
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
@@ -71,33 +104,39 @@ const AdmissionTab = () => {
 
   const pageLimit = 20;
 
-  const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
+  // Filter products based on search
+  const filteredProducts = products.filter(
+    (product) =>
+      product.student_name
+        .toLowerCase()
+        .includes(debouncedSearch.toLowerCase()) ||
+      product.whatsapp_number.includes(debouncedSearch),
+  );
 
-  const { data: ProductsData, isLoading } = useQuery<ProductResponse>({
-    queryKey: ["products", page, debouncedSearch],
-    queryFn: () => getProductsAPI(page, pageLimit, debouncedSearch),
-    keepPreviousData: true,
-  });
+  // Paginate products
+  const paginatedProducts = filteredProducts.slice(
+    (page - 1) * pageLimit,
+    page * pageLimit,
+  );
 
-  const products: ProductListResponse[] = ProductsData?.data || [];
-  const totalPages = ProductsData?.totalPages || 1;
+  const totalPages = Math.ceil(filteredProducts.length / pageLimit);
 
   const handleDeleteOpen = (product_id: number) => {
     setSelectedProductId(product_id);
     setDeleteOpen(true);
   };
+
   const handleDeleteClose = () => setDeleteOpen(false);
 
   const handleConfirmDelete = () => {
     if (selectedProductId) {
-      deleteProduct(selectedProductId, {
-        onSuccess: () => {
-          handleDeleteClose();
-        },
-        onError: (error) => {
-          console.error("Failed to delete product:", error);
-        },
-      });
+      setIsDeleting(true);
+      // Simulate delete
+      setTimeout(() => {
+        setProducts(products.filter((p) => p.product_id !== selectedProductId));
+        setIsDeleting(false);
+        handleDeleteClose();
+      }, 500);
     }
   };
 
@@ -175,14 +214,14 @@ const AdmissionTab = () => {
               </TableHead>
 
               <TableBody>
-                {products.length === 0 ? (
+                {paginatedProducts.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
                       No data found
                     </TableCell>
                   </TableRow>
                 ) : (
-                  products.map((p: ProductListResponse, index: number) => (
+                  paginatedProducts.map((p, index) => (
                     <TableRow key={p.product_id}>
                       <TableCell>
                         {(page - 1) * pageLimit + index + 1}
@@ -195,15 +234,16 @@ const AdmissionTab = () => {
                       <TableCell>{p.payment_mode || "N/A"}</TableCell>
                       <TableCell>{p.payment_installment || "N/A"}</TableCell>
                       <TableCell align="right">
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            router.push(
-                              `/admissions/edit-student/${p.product_id}`,
-                            )
-                          }
-                        >
-                          <EditIcon fontSize="small" />
+                        <IconButton size="small">
+                          <Tooltip title="View Details">
+                            <i className="ri-eye-line text-green-500"></i>
+                          </Tooltip>
+                        </IconButton>
+
+                        <IconButton size="small">
+                          <Tooltip title="Print">
+                            <i className="ri-printer-line text-blue-300"></i>
+                          </Tooltip>
                         </IconButton>
 
                         <IconButton
