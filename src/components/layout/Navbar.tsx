@@ -14,7 +14,7 @@ export default function Navbar() {
     <div className="h-16 bg-white shadow flex items-center justify-between px-6">
       <div className="flex items-center">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Melody Hub</h1>
+          <h1 className="text-xl font-bold text-gray-900">Swar Sadhana</h1>
         </div>
       </div>
 
