@@ -110,7 +110,14 @@ const AdmissionPage = () => {
   });
 
   const onSubmit = (data: AdmissionFormType) => {
+    // Save data temporarily
+    localStorage.setItem("print_admission", JSON.stringify(data));
+
+    // Call your mutation (optional)
     submitAdmission(data);
+
+    // Open print page in new tab
+    window.open("/admissions/print", "_blank");
   };
 
   return (
