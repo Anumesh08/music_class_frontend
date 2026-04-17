@@ -1,7 +1,6 @@
 "use client";
 
 import Loader from "@/components/ui/Loader";
-import { FrontLoader } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
 const Field = ({ label, value }: any) =>
@@ -14,21 +13,25 @@ const Field = ({ label, value }: any) =>
 
 export default function PrintPage() {
   const [data, setData] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     const stored = localStorage.getItem("print_admission");
     if (stored) {
       const parsed = JSON.parse(stored);
       setData(parsed);
 
-      // ✅ Trigger print AFTER data is set
       setTimeout(() => {
         window.print();
-      }, 300); // small delay for rendering
+      }, 300);
     }
   }, []);
 
-  if (!data) return <Loader />;
+  if (!mounted) return null;
+
+  const currentDate = new Date().toLocaleString();
 
   return (
     <div
@@ -39,9 +42,7 @@ export default function PrintPage() {
       <div className="text-center border-b-2 border-black pb-4 mb-6">
         <h1 className="text-2xl font-bold tracking-wide">Swar Sadhana</h1>
         <p className="text-sm text-gray-500">Admission Form</p>
-        <p className="text-[10px] text-gray-400">
-          Date: {new Date().toLocaleString()}
-        </p>
+        <p className="text-[10px] text-gray-400">Date: {currentDate}</p>
       </div>
 
       {/* STUDENT DETAILS */}

@@ -3,7 +3,7 @@
 const Loader = () => {
   return (
     <div className="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
-      <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
+      <div className="border-t-2 border-black rounded-full animate-spin h-10 w-10"></div>
     </div>
   );
 };
