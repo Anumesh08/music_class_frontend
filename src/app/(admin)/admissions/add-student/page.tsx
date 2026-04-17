@@ -15,7 +15,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Checkbox,
   Paper,
   Typography,
   Divider,
@@ -24,7 +23,6 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 
 // ✅ ZOD SCHEMA for Admission Form
 const schema = z.object({
@@ -60,7 +58,6 @@ type AdmissionFormType = z.infer<typeof schema>;
 
 const AdmissionPage = () => {
   const queryClient = useQueryClient();
-  const [isMinor, setIsMinor] = useState(true); // Assuming student is minor by default
 
   const {
     register,
@@ -69,7 +66,6 @@ const AdmissionPage = () => {
     watch,
     formState: { errors },
     reset,
-    setValue,
   } = useForm<AdmissionFormType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -85,7 +81,6 @@ const AdmissionPage = () => {
   });
 
   const admissionType = watch("admission_type");
-  const selectedInstrument = watch("instrument");
 
   // Mock mutation - replace with actual API call
   const { mutate: submitAdmission, isPending } = useMutation({

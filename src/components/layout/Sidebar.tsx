@@ -26,20 +26,15 @@ export const Sidebar = ({
       <div className="flex justify-between items-center  p-4 ">
         {!collapsed && (
           <div className="">
-            <span className="font-bold text-2xl">
-              <i className="ri-music-2-line"></i>
-            </span>
+            <span className="font-bold text-lg text-black">ADMIN</span>
           </div>
-        )}
-        {!collapsed && (
-          <span className="font-semibold text-lg text-black">ADMIN</span>
         )}
 
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="text-gray-600 hover:text-blue-600"
         >
-          <i className="ri-menu-line text-xl text-black"></i>
+          <i className="ri-menu-line text-xl text-white"></i>
         </button>
       </div>
 

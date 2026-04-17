@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import LoginForm from "@/components/auth/LoginForm";
 import { Paper } from "@mui/material";
+import Loader from "@/components/ui/Loader";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -101,8 +102,9 @@ export default function LoginPage() {
           employee_type: "demo",
         }),
       );
-      router.push("/admissions");
-      setLoading(false);
+      setTimeout(() => {
+        router.push("/admissions");
+      }, 1000);
       return;
     }
 
@@ -171,6 +173,7 @@ export default function LoginPage() {
 
   return (
     <>
+      {loading && <Loader />}
       <div
         className="h-screen flex items-center justify-center overflow-hidden"
         style={{

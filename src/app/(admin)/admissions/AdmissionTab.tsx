@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 
 import { Search } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useEffect, useRef, useState } from "react";
